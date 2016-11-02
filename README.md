@@ -61,6 +61,7 @@ Google Play IAB broadcasts and Intent with action **com.android.vending.billing.
 # Known Issues
 
 * Aptoide IAB is not compliant with [Google Play IAB v5](https://developer.android.com/google/play/billing/versions.html). Calls to **getBuyIntentToReplaceSkus** method will always fail.
+* Aptoide IAB only works with Aptoide 8.0.0.0 and above.
 
 
 
