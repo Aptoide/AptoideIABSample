@@ -20,6 +20,8 @@ android {
                 "\"" + project.GOOGLE_IAB_KEY + "\""
             buildConfigField "String", "IAB_BIND_PACKAGE",
                 "\"" + project.GOOGLE_IAB_BIND_PACKAGE + "\""
+            buildConfigField "String", "IAB_UPDATE_ACTION",
+                "\"" + project.GOOGLE_IAB_UPDATE_ACTION+ "\""
             manifestPlaceholders = [iabPermission: project.GOOGLE_IAB_PERMISSION]
         }
 
@@ -30,6 +32,8 @@ android {
                 "\"" + project.APTOIDE_IAB_KEY + "\""
             buildConfigField "String", "IAB_BIND_PACKAGE",
                 "\"" + project.APTOIDE_IAB_BIND_PACKAGE + "\""
+            buildConfigField "String", "IAB_UPDATE_ACTION",
+                "\"" + project.APTOIDE_IAB_UPDATE_ACTION+ "\""
             manifestPlaceholders = [iabPermission: project.APTOIDE_IAB_PERMISSION]
         }
     }

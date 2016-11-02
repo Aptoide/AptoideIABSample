@@ -1,19 +1,3 @@
-/*
- * Copyright 2012 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.aptoide.iabexample;
 
 import android.app.Activity;
@@ -22,6 +6,7 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,6 +15,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.aptoide.iabexample.R;
+import com.aptoide.iabexample.util.IabBroadcastReceiver;
+import com.aptoide.iabexample.util.IabBroadcastReceiver.IabBroadcastListener;
 import com.aptoide.iabexample.util.IabHelper;
 import com.aptoide.iabexample.util.IabHelper.IabAsyncInProgressException;
 import com.aptoide.iabexample.util.IabResult;
@@ -90,7 +77,8 @@ import java.util.List;
  * we have to apply its effects to our world and consume it. This
  * is also very important!
  */
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity implements IabBroadcastListener,
+        OnClickListener {
     // Debug tag, for logging
     static final String TAG = "TrivialDrive";
 
@@ -134,6 +122,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
     // The helper object
     IabHelper mHelper;
+
+    // Provides purchase notification while this app is running
+    IabBroadcastReceiver mBroadcastReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -188,6 +179,17 @@ public class MainActivity extends Activity implements OnClickListener {
 
                 // Have we been disposed of in the meantime? If so, quit.
                 if (mHelper == null) return;
+
+                // Important: Dynamically register for broadcast messages about updated purchases.
+                // We register the receiver here instead of as a <receiver> in the Manifest
+                // because we always call getPurchases() at startup, so therefore we can ignore
+                // any broadcasts sent while the app isn't running.
+                // Note: registering this listener in an Activity is a bad idea, but is done here
+                // because this is a SAMPLE. Regardless, the receiver must be registered after
+                // IabHelper is setup, but before first call to getPurchases().
+                mBroadcastReceiver = new IabBroadcastReceiver(MainActivity.this);
+                IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
+                registerReceiver(mBroadcastReceiver, broadcastFilter);
 
                 // IAB is fully set up. Now, let's get an inventory of stuff we own.
                 Log.d(TAG, "Setup successful. Querying inventory.");
@@ -266,6 +268,17 @@ public class MainActivity extends Activity implements OnClickListener {
             Log.d(TAG, "Initial inventory query finished; enabling main UI.");
         }
     };
+
+    @Override
+    public void receivedBroadcast() {
+        // Received a broadcast notification that the inventory of items has changed
+        Log.d(TAG, "Received broadcast notification. Querying inventory.");
+        try {
+            mHelper.queryInventoryAsync(mGotInventoryListener);
+        } catch (IabAsyncInProgressException e) {
+            complain("Error querying inventory. Another async operation in progress.");
+        }
+    }
 
     // User clicked the "Buy Gas" button
     public void onBuyGasButtonClicked(View arg0) {
@@ -561,6 +574,11 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        // very important:
+        if (mBroadcastReceiver != null) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
 
         // very important:
         Log.d(TAG, "Destroying helper.");
