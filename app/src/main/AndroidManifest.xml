@@ -18,7 +18,7 @@
           package="com.aptoide.iabexample">
 
     <!-- VERY IMPORTANT! Don't forget this permission, or in-app billing won't work. -->
-    <uses-permission android:name="cm.aptoide.pt.permission.BILLING" />
+    <uses-permission android:name="${iabPermission}" />
 
     <application android:allowBackup="true"
                  android:label="@string/app_name"

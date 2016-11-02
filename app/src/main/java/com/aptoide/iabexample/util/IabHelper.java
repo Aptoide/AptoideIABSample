@@ -29,13 +29,9 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
-
-import cm.aptoide.pt.iab.AptoideInAppBillingService;
-
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONException;
 
 
 /**
@@ -106,7 +102,7 @@ public class IabHelper {
     Context mContext;
 
     // Connection to the service
-    AptoideInAppBillingService mService;
+    BillingService mService;
     ServiceConnection mServiceConn;
 
     // The request code used to launch purchase flow
@@ -231,7 +227,7 @@ public class IabHelper {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 if (mDisposed) return;
                 logDebug("Billing service connected.");
-                mService = AptoideInAppBillingService.Stub.asInterface(service);
+                mService = BillingServiceFactory.create(service);
                 String packageName = mContext.getPackageName();
                 try {
                     logDebug("Checking for in-app billing 3 support.");
