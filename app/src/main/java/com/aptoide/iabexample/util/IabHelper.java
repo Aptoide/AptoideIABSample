@@ -1,18 +1,3 @@
-/* Copyright (c) 2012 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.aptoide.iabexample.util;
 
 import android.app.Activity;
@@ -166,8 +151,7 @@ public class IabHelper {
      * @param ctx Your application or Activity context. Needed to bind to the in-app billing service.
      * @param base64PublicKey Your application's public key, encoded in base64.
      *     This is used for verification of purchase signatures. You can find your app's base64-encoded
-     *     public key in your application's page on Google Play Developer Console. Note that this
-     *     is NOT your "developer public key".
+     *     public key in your application's page on Aptoide back-office.
      */
     public IabHelper(Context ctx, String base64PublicKey) {
         mContext = ctx.getApplicationContext();
@@ -407,8 +391,8 @@ public class IabHelper {
 
     /**
      * Initiate the UI flow for an in-app purchase. Call this method to initiate an in-app purchase,
-     * which will involve bringing up the Google Play screen. The calling activity will be paused
-     * while the user interacts with Google Play, and the result will be delivered via the
+     * which will involve bringing up the Aptoide screen. The calling activity will be paused
+     * while the user interacts with Aptoide, and the result will be delivered via the
      * activity's {@link android.app.Activity#onActivityResult} method, at which point you must call
      * this object's {@link #handleActivityResult} method to continue the purchase flow. This method
      * MUST be called from the UI thread of the Activity.
