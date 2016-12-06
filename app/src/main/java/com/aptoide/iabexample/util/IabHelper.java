@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
+import com.aptoide.iabexample.BuildConfig;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
@@ -273,8 +274,8 @@ public class IabHelper {
             }
         };
 
-        Intent serviceIntent = new Intent("cm.aptoide.pt.iab.action.BIND");
-        serviceIntent.setPackage("cm.aptoide.pt");
+        Intent serviceIntent = new Intent(BuildConfig.IAB_BIND_ACTION);
+        serviceIntent.setPackage(BuildConfig.IAB_BIND_PACKAGE);
         List<ResolveInfo> intentServices = mContext.getPackageManager().queryIntentServices(serviceIntent, 0);
         if (intentServices != null && !intentServices.isEmpty()) {
             // service available to handle that Intent
