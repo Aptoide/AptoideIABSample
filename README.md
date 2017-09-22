@@ -1,12 +1,13 @@
 # Aptoide IAB
 
+
 Aptoide IAB lets you sell digital content from inside applications.
+
 
 ## Architecture
 
-Aptoide exposes a Android Service which your application should bind with. Once bound to Aptoide service your application can start communicating over IPC using an AIDL inteface.
 
-![Architecture](docs/architecture.png)
+Aptoide exposes a Android Service which your application should bind with. Once bound to Aptoide service your application can start communicating over IPC using an AIDL inteface.
 
 
 ## Google Play IAB to Aptoide IAB Migration
@@ -14,7 +15,7 @@ Aptoide exposes a Android Service which your application should bind with. Once 
 
 ### AIDL
 
-Like Google Play IAB, Aptoide IAB uses a .AIDL file in order to communicate with Aptoide service. The package for your .AIDL must be **cm.aptoide.pt.iab** instead of **com.android.vending.billing**. Both Aptoide and Google .AIDL files are identical, but you need to rename **IInAppBillingService.aild** to **AptoideInAppBillingService.aidl**.
+Like Google Play IAB, Aptoide IAB uses a AIDL file in order to communicate with Aptoide service. The package for your AIDL must be **cm.aptoide.pt.iab** instead of **com.android.vending.billing**. Both Aptoide and Google AIDL files are identical, but you need to rename **InAppBillingService.aild** to **AptoideInAppBillingService.aidl**.
 
 ![Migration](docs/aidl-migration.png)
 
@@ -49,16 +50,18 @@ In order to communicate with Aptoide IAB your application must bind to a service
 
 ### Aptoide Public Key
 
-Just like Google Play IAB, Aptoide IAB also exposes a public key. You should use Aptoide Public Key to verify your purchases. It works exactly like Google Play IAB key so you just need to replace each other.
+Just like Google Play IAB, Aptoide IAB also exposes a public key. You should use Aptoide public key to verify your purchases. It works exactly like Google Play IAB key so you just need to replace each other.
 
-To find your Aptoide Public key go to [Aptoide Back Office -> My Apps -> Catalogue -> Certified Apps](https://www.aptoide.com/account/certified-apps). You can click In-app button and the key will be presented.
+To find your Aptoide public key go to [Aptoide Back Office -> My Apps -> Catalogue -> Certified Apps](https://www.aptoide.com/account/certified-apps). You can click In-app button and the key will be presented.
 
 
 ### Purchase Broadcast
 
 Google Play IAB broadcasts and Intent with action **com.android.vending.billing.PURCHASES_UPDATED**. Aptoide IAB does not do that therefore any code related with listening to that Intent can be removed.
 
+
 # Known Issues
+
 
 * Aptoide IAB is not compliant with [Google Play IAB v5](https://developer.android.com/google/play/billing/versions.html). Calls to **getBuyIntentToReplaceSkus** method will always fail.
 * Aptoide IAB only works with Aptoide 8.0.0.0 and above.

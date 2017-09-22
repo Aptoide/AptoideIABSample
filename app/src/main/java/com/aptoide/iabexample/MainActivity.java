@@ -153,7 +153,7 @@ public class MainActivity extends Activity implements IabBroadcastListener,
         if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) {
             throw new RuntimeException("Please put your app's public key in MainActivity.java. See README.");
         }
-        if (getPackageName().startsWith("com.example")) {
+        if (getPackageName().startsWith("com.aptoide")) {
             throw new RuntimeException("Please change the sample's package name! See README.");
         }
 
